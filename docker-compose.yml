@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  analytics:
+    container_name: link-shortener
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+    depends_on:
+      - mongodb
+    ports:
+      - "8080:8080"
+
+  mongodb:
+    container_name: link-shortener-db
+    image: mongo:6.0.4
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER:-}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD:-}
+    volumes:
+      - mongodbdata:/data/db
+
+volumes:
+  mongodbdata:
